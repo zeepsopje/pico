@@ -1,6 +1,18 @@
 <script>
+	import { writable, get } from 'svelte/store';
+	import { Text, Label, EmptySpace } from 'field';
 	import Sidebar from '$lib/Sidebar.svelte';
 	import TopBar from '$lib/TopBar.svelte';
+	import Builder from '$lib/Builder.svelte';
+
+	let app = writable({
+		name: 'My app',
+		fields: [
+			new Label('Description'),
+			new Text('Description', { width: 1 }),
+			new Text('Description', { width: 2 }),
+		],
+	});
 </script>
 
 <div
@@ -8,10 +20,12 @@
 	style:--sidebar-width="700px"
 >
 	<TopBar />
-	<div class="builder">
-	</div>
+	<Builder bind:app={app} />
 	<Sidebar title="Catalogue" />
 	<div class="bottom-bar">
+		<div class="dev">
+			<button on:click={alert(JSON.stringify($app, null, 4))}>debug</button>
+		</div>
 	</div>
 </div>
 
@@ -25,13 +39,6 @@
 		"top-bar top-bar"
 		"builder sidebar"
 		"bottom-bar bottom-bar";
-	}
-
-	.builder {
-		background-color: #F9F9F9;
-		border-right: solid 1px var(--border-color);
-		grid-area: builder;
-		padding: 58px var(--page-padding) 0;
 	}
 
 	.bottom-bar {
